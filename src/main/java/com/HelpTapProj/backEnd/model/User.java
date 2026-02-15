@@ -2,21 +2,26 @@ package com.HelpTapProj.backEnd.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
 @Data
 @Entity
-@Table(name = "user", schema = "\"hpTap\"")
+@Table(name = "users", schema = "\"hpTap\"")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -81,4 +86,56 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<AccessLog> accessLogs = new ArrayList<>();
+
+    public User(String email, String password, UserRole role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    //Metodos User Datails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        switch (this.role) {
+            case ADMIN:
+                return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_PATIENT"));
+            case PATIENT:
+                return List.of(new SimpleGrantedAuthority("ROLE_PATIENT"));
+            case DOCTOR:
+                return List.of(new SimpleGrantedAuthority("ROLE_DOCTOR"));
+            case POLICE:
+                return List.of(new SimpleGrantedAuthority("ROLE_POLICE"));
+            case FIREFIGHTER:
+                return List.of(new SimpleGrantedAuthority("ROLE_FIREFIGHTER"));
+            case RESCUER:
+                return List.of(new SimpleGrantedAuthority("ROLE_RESCUER"));
+            default:
+                return List.of(null);
+        }
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;//UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;//UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;//UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;//UserDetails.super.isEnabled();
+    }
 }
