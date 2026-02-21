@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserCreateDTO dto) {
+        UserResponseDTO createdUser = userService.createUser(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Integer id) {
@@ -33,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getUserByRolse(@RequestParam UserRole role) {
+    public ResponseEntity<List<UserResponseDTO>> getUserByRole(@RequestParam UserRole role) {
         List<UserResponseDTO> users = userService.getUsersByRole(role);
         return ResponseEntity.ok(users);
     }

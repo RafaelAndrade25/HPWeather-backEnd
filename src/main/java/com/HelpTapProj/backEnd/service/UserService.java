@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     //private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -34,56 +35,50 @@ public class UserService {
             throw new IllegalArgumentException("Identifier already in use");
         }
 
-//        User user = User.builder().fullName(userCreateDTO.fullName())
-//                .nationalRegistration(userCreateDTO.cpf())
-//                .birthDate(userCreateDTO.dateBirth())
-//                .sex(userCreateDTO.sex())
-//                .email(userCreateDTO.email());
-//                .password(userCreateDTO.encode(dto.password()))
-//                .nameOfFather(userCreateDTO.nameOfFather())
-//                .nameOfMother(userCreateDTO.nameOfMother())
-//                .userType(userCreateDTO.userType())
-//                .identifier(userCreateDTO.identifier())
-//                .role(userCreateDTO.role())
-//                .build();
-//        User savedUser = userRepository.save(user);
-//        return toResponseDTO(savedUser);
-        return null;
+        User user = User.builder().fullName(userCreateDTO.fullName())
+                .nationalRegistration(userCreateDTO.cpf())
+                .birthDate(userCreateDTO.dateBirth())
+                .sex(userCreateDTO.sex())
+                .email(userCreateDTO.email())
+                .password(passwordEncoder.encode(userCreateDTO.password()))
+                .fatherName(userCreateDTO.nameOfFather())
+                .motherName(userCreateDTO.nameOfMother())
+                .identifier(userCreateDTO.identifier())
+                .role(userCreateDTO.role())
+                .build();
+        User savedUser = userRepository.save(user);
+        return toResponseDTO(savedUser);
     }
 
     @Transactional
     public UserResponseDTO getUserById(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
-        //return toResponseDTO(user);
-        return null;
+        return toResponseDTO(user);
+
     }
 
     @Transactional
     public UserResponseDTO getUserByEmail(String email) {
-        UserDetails userDetails = userRepository.findByEmail(email);
-        if (userDetails == null) {
-            throw new IllegalArgumentException("User not found with email: " + email);
-        }
-        User user = (User) userDetails;
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+
         return toResponseDTO(user);
     }
 
     @Transactional
     public List<UserResponseDTO> getAllUsers() {
-//        return userRepository.findAll()
-//                .stream().map(this::toResponseDTO)
-//                .collect(Collectors.toList());
-        return null;
+        return userRepository.findAll()
+                .stream().map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public List<UserResponseDTO> getUsersByRole(UserRole role) {
-//        return userRepository.findByRole(role)
-//                .stream()
-//                .map(this::toResponseDTO)
-//                .collect(Collectors.toList());
-        return null;
+        return userRepository.findByRole(role)
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -106,14 +101,13 @@ public class UserService {
             if (dto.fullName() != null) user.setFullName(dto.fullName());
             if (dto.dateBirth() != null) user.setBirthDate(dto.dateBirth());
             if (dto.sex() != null) user.setSex(dto.sex());
-            //if (dto.password() != null) user.setPassword(passwordEncoder.encode(dto.password()));
+            if (dto.password() != null) user.setPassword(passwordEncoder.encode(dto.password()));
             if (dto.nameOfFather() != null) user.setFatherName(dto.nameOfFather());
             if (dto.nameOfMother() != null) user.setMotherName(dto.nameOfMother());
             if (dto.role() != null) user.setRole(dto.role());
 
             User updatedUser = userRepository.save(user);
-            //return toResponseDTO(updatedUser);
-            return null;
+            return toResponseDTO(updatedUser);
     }
 
     @Transactional

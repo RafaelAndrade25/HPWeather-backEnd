@@ -1,52 +1,36 @@
 package com.HelpTapProj.backEnd.controller;
 
-import com.HelpTapProj.backEnd.dto.AuthenticationRequestDTO;
+import com.HelpTapProj.backEnd.dto.LoginRequestDTO;
 import com.HelpTapProj.backEnd.dto.LoginResponseDTO;
-import com.HelpTapProj.backEnd.dto.RegisterDTO;
-import com.HelpTapProj.backEnd.infra.security.TokenService;
-import com.HelpTapProj.backEnd.model.User;
-import com.HelpTapProj.backEnd.repository.UserRepository;
+import com.HelpTapProj.backEnd.service.AuthorizationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
+    private final AuthorizationService authorizationService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationRequestDTO data) {
-        var emailPassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = this.authenticationManager.authenticate(emailPassword);
-
-        var token = tokenService.generateToken((User) auth.getPrincipal());
-
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+    @PostMapping("mobile/login")
+    public ResponseEntity<LoginResponseDTO> loginMobile(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        LoginResponseDTO response = authorizationService.loginMobile(loginRequestDTO);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
-        if (this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
+    @PostMapping("web/login")
+    public ResponseEntity<LoginResponseDTO> loginWeb(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        LoginResponseDTO response = authorizationService.loginWeb(loginRequestDTO);
+        return ResponseEntity.ok(response);
+    }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role());
-        this.userRepository.save(newUser);
-        return ResponseEntity.ok().build();
+    @PostMapping("validate")
+    public ResponseEntity<Integer> validateToken(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+        Integer userId = authorizationService.validateTokenAndGetUserId(token);
+        return ResponseEntity.ok(userId);
     }
 }
