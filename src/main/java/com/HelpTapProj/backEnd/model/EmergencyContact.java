@@ -24,4 +24,7 @@ public class EmergencyContact {
 
     @Column(name = "phone_owner", nullable = false)
     private String phoneOwner;
+
+    @Column(name = "degreeOfKinship", nullable = false)
+    private String degreeOfKinship;
 }
