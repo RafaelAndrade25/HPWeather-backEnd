@@ -8,11 +8,11 @@
 		<version>4.0.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.HPWeather-backEnd</groupId>
-	<artifactId>HPWeather-backEnd</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>HPWeather-backEnd</name>
-	<description>HPWeather Project back end</description>
+	<groupId>com.HelpTapProj-backEnd</groupId>
+	<artifactId>HelpTap-backEnd</artifactId>
+	<version>0.0.1.0</version>
+	<name>HelpTap-backEnd</name>
+	<description>HelpTap Project back end</description>
 	<url/>
 	<licenses>
 		<license/>
