@@ -36,6 +36,7 @@ public class SecurityConfigurations {
                         .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                                 .requestMatchers("/health").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/weather").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/users").hasAnyRole(
                                         "ADMIN", "DOCTOR", "POLICE", "FIREFIGHTER", "RESCUER"
