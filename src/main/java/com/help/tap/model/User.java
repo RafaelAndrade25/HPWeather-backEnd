@@ -14,7 +14,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "users", schema = "\"hpTap\"")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor

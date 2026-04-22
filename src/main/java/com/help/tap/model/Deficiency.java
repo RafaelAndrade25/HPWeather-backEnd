@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "deficiency", schema = "\"hpTap\"")
+@Table(name = "deficiency")
 @Getter
 @Setter
 @NoArgsConstructor
