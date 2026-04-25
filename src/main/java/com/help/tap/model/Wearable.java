@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "wearable")
+@Table(name = "wearable", schema = "\"hpTap\"")
 @Getter
 @Setter
 @NoArgsConstructor

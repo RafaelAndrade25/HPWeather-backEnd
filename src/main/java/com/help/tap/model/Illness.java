@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "illness")
+@Table(name = "illness", schema = "\"hpTap\"")
 @Getter
 @Setter
 @NoArgsConstructor
