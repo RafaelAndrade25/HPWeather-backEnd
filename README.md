@@ -1,6 +1,6 @@
 # HelpTap - Backend
 
-Este é o repositório backend do projeto **HelpTap**. A aplicação é construída com **Java 21** e **Spring Boot 3.x** (v4.0.1 listada no POM), utilizando **PostgreSQL** como banco de dados e **JWT** para segurança e autenticação. A API fornece gerenciamento de usuários, autenticação separada para web e mobile, além de uma integração com a API de clima Open-Meteo.
+Este é o repositório backend do projeto **HelpTap**. A aplicação é construída com **Java 21** e **Spring Boot 3.x** (v4.0.1 listada no POM), utilizando **PostgreSQL** como banco de dados e **JWT** para segurança e autenticação. A API fornece gerenciamento de usuários, autenticação separada para web e mobile, além de uma integração com a API de clima Open-Meteo. Essa versão do projeto foi feita para ser consumida pelo projeto de programação mobile, foi aproveitado o back end e design de telas do projeto HelpTap do Trabalho de conclusão de curso e renomeado para HP Weather, pois foi adicionado o consumo de uma API de clima, para comprovação de conhecimento
 
 ## 🚀 Tecnologias Utilizadas
 
